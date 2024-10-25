@@ -5,6 +5,8 @@ import dash_bootstrap_components as dbc
 
 register_page(__name__)
 
+
+# test_cards - тестовые карточки челенджей
 test_cards = []
 for i in range(10):
     card = dbc.Card(
@@ -37,22 +39,37 @@ for i in range(10):
                         className="col-md-8",
                     ),
                 ],
-                className="g-0 d-flex align-items-center w-100",
+                className="g-0 d-flex align-items-center",
             )
         ],
-        className="mb-3",
-        style={"maxWidth": "540px"},
+        style={
+            "maxWidth": "70%",
+        },
     )
 
-    test_cards.append(card)
-
+    test_cards.append(
+        dbc.ListGroupItem(
+            card,
+            className="mb-3"
+        ),
+    )
 
 layout = html.Div(
     [
         dcc.Location(id='home-url', refresh=False),
         html.H2('Челенджи', id='header-title', className='ten columns'),
 
-        *test_cards,
+        html.Div(
+            dbc.ListGroup(test_cards),
+            style={
+                "maxWidth":"70%",
+                "margin-left" : "auto",
+                "margin-right" : "auto"
+            }
+        )
+        # html.Div(
+        #     test_cards,
+        # ),
         
         # dbc.Button(id='new-card', children='myChildren', n_clicks=0, color="secondary", className="me-1", value='hihi'),
         # dbc.Button('Submit', id='submit-val', n_clicks=0),
