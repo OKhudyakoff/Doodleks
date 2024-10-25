@@ -12,7 +12,7 @@ app = dash.Dash(
 )
 
 app.config['suppress_callback_exceptions'] = True
-app.title = 'basic-dash-auth-flow'
+app.title = 'viZOV'
 
 server = app.server
 server.config['SECRET_KEY'] = 'k1LUZ1fZShowB6opoyUIEJkJvS8RBF6MMgmNcDGNmgGYr'
