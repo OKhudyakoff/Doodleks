@@ -39,7 +39,7 @@ def update_authentication_status(_):
     if True:
         return html.Div(
             [
-                dbc.Button("Home", href="/", color="secondary", className="me-1"),
+                dbc.Button("Home", href="/home", color="secondary", className="me-1"),
                 dbc.Button(id='logout-button', children='Logout', n_clicks=0, color="secondary", className="me-1"),
             ]
         )
