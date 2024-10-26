@@ -1,6 +1,13 @@
 from dash import dcc, html, Input, Output, callback, register_page, State, ALL
 import dash_bootstrap_components as dbc
 
+from auth import Auth
+
+from models.challenge import Challenge
+from models.team import Team
+from models.user_challenge import UserChallenge
+from models.user_team import UserTeam
+
 register_page(__name__, path="/create_challenge")
 
 layout = html.Div(children=[
@@ -128,23 +135,42 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
         if not name or not start_date or not end_date or not description or not status:
             return "Пожалуйста, заполните все поля."
 
-        id_owner = Auth
-        
+        id_owner = str(Auth.get_attrs()['id'])
+
         # Собираем все данные о вызове и командах
         challenge_data = {
             "name": f"'{name}'",
             "start_date": f"'{start_date}'",
             "end_date": f"'{end_date}'",
             "description": f"'{description}'",
-            "organizer": str(Auth.get_attrs()['id']),
+            "organizer": id_owner,
             "status": f"'{status}'"
         }
 
-        teams = [team for team in team_data if team["name"] and team["members"]]
+        # сохраняем вызов
+        challenge = Challenge(challenge_data)
+        challenge.save()
 
+        id_challenge = str(challenge.get_attrs()['id'])
 
+        # сохраняем связь вызов - пользователь
+        user_challenge = UserChallenge({
+            'id_user' : id_owner,
+            'id_challenge' : id_challenge
+        })
 
-        print(challenge_data)  # Проверка перед отправкой в базу данных
+        user_challenge.save()
+
+        # сохраняем команды
+        teams = [Team({
+            'team_id' : f"'{team['team_id']}'",
+            'name' : f"'{team['name']}'",
+            'members' : str(team['members']),
+            'id_challenge' : id_challenge
+        }) for team in team_data if team["name"] and team["members"]]
+
+        # сохраняем команды
+        [team.save() for team in teams]
 
         return "Вызов успешно создан!"
     return ""

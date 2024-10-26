@@ -27,8 +27,6 @@ class Model:
 
             query = f'''insert into {self.__table_name} ({columns}) values ({values})'''
 
-            print(query)
-
             self.db.executeQuery(query)
 
         except APIPostgresException as e:
@@ -43,8 +41,6 @@ class Model:
             key_values = ', '.join([
                 f'{key}={value}' for key, value in self.__attrs.items() if key != 'id'
             ])
-
-            print(key_values)
 
             query = f'''update {self.__table_name} set {key_values} where id = {self.__attrs['id']}'''
 
