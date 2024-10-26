@@ -6,6 +6,8 @@ import themes
 import nav_buttons
 import user
 
+from APIPostgres import APIPostgres, APIPostgresException
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 user_pages = {"Мои челленджи":"/my_challenge", "Настройки":"/settings"}
 
@@ -53,4 +55,9 @@ def update_authentication_status(_):
     return nav_buttons.nav_buttons()
 
 if __name__ == '__main__':
+    
+    # если не прошла инициализация базы - падаем
+    if APIPostgres.init_tables():
+        raise APIPostgresException('Error initialize database')
+
     app.run_server(debug=True)
