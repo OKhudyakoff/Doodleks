@@ -2,11 +2,14 @@ import firebird.driver as fdb
 
 def connect_db():
     conn = fdb.connect(
-        database='C:/Program Files/Firebird/User_log/USER_LOG.FBD', 
+        database='//192.168.1.136/User_log2/USER_LOG2.FBD', 
         user='sysdba',             
         password='456123',         
         charset='UTF8'            
     )
+
+    print(conn)
+    print(conn.cursor())
     return conn
 
 # Функция для проверки логина и пароля
@@ -30,3 +33,4 @@ def check_user_credentials(login, password):
         cur.close()
         conn.close()
 
+print(connect_db())
