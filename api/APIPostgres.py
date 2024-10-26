@@ -30,7 +30,28 @@ class APIPostgres:
     __conn = None
     __cur = None
 
-    
+    __sql_user_create = '''create table if not exists user_ (
+        id int primary key,
+        name varchar(256),
+        login varchar(128),
+        password varchar(128),
+        position varchar(128),
+        department varchar(256),
+        create_date date
+    );'''
+
+    __sql_challenge_create = '''create table if not exists challenge_(
+        id int primary key,
+        title varchar(256),
+        description varchar(1024),
+        prize int,
+        amount_members int
+    );'''
+
+    __sql_link_user_challenge_create = '''create table if not exists user_challenge_(
+        id_user int REFERENCES vizov.user_ on delete cascade,
+        id_challenge int REFERENCES vizov.challenge_ on delete cascade
+    );'''
 
     def __init__(self):
         if APIPostgres.__conn == None or APIPostgres.__conn == None:
@@ -45,14 +66,10 @@ class APIPostgres:
                 password = APIPostgres.__password  # Пароль
             )
 
-        print(APIPostgres.__conn)
-
     def __create_cur(self):
         if APIPostgres.__cur == None:
             self.__create_conn()
             APIPostgres.__cur = APIPostgres.__conn.cursor()
-
-        print(APIPostgres.__cur)
 
     def executeQuery(self, query : str):
         '''
@@ -75,8 +92,9 @@ class APIPostgres:
         return None
 
     def init_tables():
-        pass
-
+        APIPostgres.__cur.execute(__sql_user_create)
+        APIPostgres.__cur.execute(__sql_challenge_create)
+        APIPostgres.__cur.execute(__sql_link_user_challenge_create)
 
 class APIPostgresException(Exception):
     pass
