@@ -7,7 +7,8 @@ class Challenge(Model):
         'end_date' : 'Null',
         'description' : 'Null',
         'organizer' : 'Null',
-        'status' : 'Null'
+        'status' : 'Null',
+        'amount_members' : 'Null'
     }
     def __init__(self, attrs_=attrs):
         super().__init__(table_name='challenge_', attrs_=attrs_)

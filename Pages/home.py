@@ -17,7 +17,8 @@ def get_cards():
         'end_date' : 'Null',
         'description' : 'Null',
         'organizer' : 'Null',
-        'status' : 'Null'
+        'status' : 'Null',
+        'amount_members' : 'Null'
     })
 
     rows = challenge.get_all()

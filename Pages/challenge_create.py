@@ -148,7 +148,8 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
             "end_date": f"'{end_date}'",
             "description": f"'{description}'",
             "organizer": id_owner,
-            "status": f"'{status}'"
+            "status": f"'{status}'",
+            'amount_members' : str(0)
         }
 
         # сохраняем вызов

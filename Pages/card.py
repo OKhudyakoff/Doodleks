@@ -3,44 +3,28 @@ from dash import dcc, html, register_page, callback, Input, Output
 
 import dash_bootstrap_components as dbc
 
+from models.challenge import Challenge
+
 #  todo
 register_page(__name__, path_template='/card/<id_challenge>')
 
-testCard = {
-    "titleChalenge" : "test title chalenge",
-    "image" : dash.get_asset_url("static/images/test_image_chalenge.png"),
-    "amount_members" : 6116,
-    "chalenge_prize" : "1 diamond",
-    "owner" : "test owner", # загрузить пользователя из базы
-    "description" : """Here is a random challenge:
-
-**The Mysterious Island of Lost Sounds**
-
-You wake up on a mysterious island with no memory of how you got there. As you explore the island, you realize that it is home to a strange phenomenon - every sound that has ever been made in the history of the world is trapped here, and you can hear them all at the same time.
-
-The island is divided into different regions, each representing a different era of human history. You hear the chatter of ancient civilizations, the clang of medieval swords, the roar of industrial machines, and the hum of modern technology. But amidst all the noise, you also hear whispers of forgotten languages, the songs of extinct birds, and the echoes of distant memories.
-
-Your challenge is to navigate the island, uncover the secrets of the lost sounds, and find a way to escape. But be warned: the island is full of dangers, and the sounds can be overwhelming. You'll need to use your wits and your ears to survive.
-
-**Your goal:**
-
-Find the source of the mysterious sounds and uncover the secrets of the island.
-
-**Your starting location:**
-
-You find yourself standing on a sandy beach, with dense jungle in front of you. The sounds of the island are deafening - you hear the chatter of monkeys, the calls of exotic birds, and the distant rumble of a waterfall.
-
-**What do you do?**
-
-A) Venture into the jungle to explore
-B) Follow the sound of the waterfall
-C) Search the beach for clues
-D) Try to listen more closely to the sounds around you
-
-Choose your response:"""
-}
-
 def getChallenge(id_challenge):
+    """
+    
+    """
+    
+    attrs = {
+        'id' : str(id_challenge),
+        'name' : 'Null',
+        'start_date' : 'Null',
+        'end_date' : 'Null',
+        'description' : 'Null',
+        'organizer' : 'Null',
+        'status' : 'Null'
+    }
+    
+    challenge = Challenge(attrs_=attrs)
+
     return testCard
 
 def layout(id_challenge, **kwargs):
@@ -48,7 +32,7 @@ def layout(id_challenge, **kwargs):
     challenge = getChallenge(id_challenge)
 
     heading = html.H1(
-        children=f"{challenge['titleChalenge']}",
+        children=f"{challenge['name']}",
         style={
             "maxWidth":"25%",
             "margin-left" : "auto",
