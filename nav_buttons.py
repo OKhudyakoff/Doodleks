@@ -18,12 +18,13 @@ dropdown = html.Div(
                     "Выход", id="logout-button", n_clicks=0
                 ),
             ],
-            label="User",
+            label=Auth.get_attrs(),
         ),
     ]
 )
 
 def nav_buttons():
+    print(Auth.get_attrs())
     if(Auth.get_is_auth()):
         return html.Div(className="nav_buttons", children=
         [
