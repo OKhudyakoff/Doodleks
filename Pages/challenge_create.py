@@ -1,6 +1,13 @@
 from dash import dcc, html, Input, Output, callback, register_page, State, ALL
 import dash_bootstrap_components as dbc
 
+from auth import Auth
+
+from models.challenge import Challenge
+from models.team import Team
+from models.user_challenge import UserChallenge
+from models.user_team import UserTeam
+
 register_page(__name__, path="/create_challenge")
 
 layout = html.Div(children=[
@@ -28,7 +35,7 @@ layout = html.Div(children=[
             
             dcc.Textarea(id="description", placeholder="Описание", style={'marginBottom': '10px', 'width': '300px'}),
             
-            dcc.Input(id="organizer", className='challenge_input', type="text", placeholder="Организатор", style={'marginBottom': '10px', 'width': '300px'}),
+            # dcc.Input(id="organizer", className='challenge_input', type="text", placeholder="Организатор", style={'marginBottom': '10px', 'width': '300px'}),
             
             html.H5("Выберите статус", style={'textAlign': 'left', 'color': '#333'}),
 
@@ -119,27 +126,51 @@ def manage_teams(add_clicks, team_names, team_members, team_list_children, team_
     State("start-date", "date"),
     State("end-date", "date"),
     State("description", "value"),
-    State("organizer", "value"),
+    # State("organizer", "value"),
     State("status", "value"),
     State("team-data", "data")
 )
-def create_challenge(n_clicks, name, start_date, end_date, description, organizer, status, team_data):
+def create_challenge(n_clicks, name, start_date, end_date, description, status, team_data):
     if n_clicks > 0:
-        if not name or not start_date or not end_date or not description or not organizer or not status:
+        if not name or not start_date or not end_date or not description or not status:
             return "Пожалуйста, заполните все поля."
+
+        id_owner = str(Auth.get_attrs()['id'])
 
         # Собираем все данные о вызове и командах
         challenge_data = {
-            "name": name,
-            "start_date": start_date,
-            "end_date": end_date,
-            "description": description,
-            "organizer": organizer,
-            "status": status,
-            "teams": [team for team in team_data if team["name"] and team["members"]]
+            "name": f"'{name}'",
+            "start_date": f"'{start_date}'",
+            "end_date": f"'{end_date}'",
+            "description": f"'{description}'",
+            "organizer": id_owner,
+            "status": f"'{status}'"
         }
 
-        print(challenge_data)  # Проверка перед отправкой в базу данных
+        # сохраняем вызов
+        challenge = Challenge(challenge_data)
+        challenge.save()
+
+        id_challenge = str(challenge.get_attrs()['id'])
+
+        # сохраняем связь вызов - пользователь
+        user_challenge = UserChallenge({
+            'id_user' : id_owner,
+            'id_challenge' : id_challenge
+        })
+
+        user_challenge.save()
+
+        # сохраняем команды
+        teams = [Team({
+            'team_id' : f"'{team['team_id']}'",
+            'name' : f"'{team['name']}'",
+            'members' : str(team['members']),
+            'id_challenge' : id_challenge
+        }) for team in team_data if team["name"] and team["members"]]
+
+        # сохраняем команды
+        [team.save() for team in teams]
 
         return "Вызов успешно создан!"
     return ""

@@ -34,6 +34,9 @@ class User(Model):
         self.set_attrs(self.attrs)
         self.save()
 
+        Auth.set_is_auth()
+        Auth.set_attrs(self.get_attrs())
+
         return rez
 
     def auth_user(self, login='test', password='test'):

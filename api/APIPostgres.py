@@ -57,7 +57,8 @@ class APIPostgres:
         id int primary key,
         team_id varchar(128),
         name varchar(128),
-        members int
+        members int,
+        id_challenge int REFERENCES vizov.challenge_ on delete cascade
     );'''
 
     __sql_link_teams_user_create = '''create table teams_user_(
