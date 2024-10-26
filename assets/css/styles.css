@@ -1,19 +1,47 @@
-.user_content {
-  width: 600px;
-  margin: 0 auto;
-  background-color: #ffffff22;
-  padding: 0 20px 20px 20px;
-  border: 2px solid black;
-  align-items: center;
-}
-
-.nav_buttons{
-  display: flex; /*Задаем блочно-строчное отображение*/ 
-}
-
-.nav_panel{
-  display:flex;
-  height: 50px;
-  align-items: center;
+.body{
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 20px 0px;
   text-align: center;
+  justify-content: center;
+}
+
+
+.wrapper{
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+/* Стиль шапки с серым фоном и отступами */
+.header {
+  display:flex;
+  background-color: #f1f1f1;
+  padding: 10px 30px;
+  flex-direction: row;
+  border-radius: 10px;
+  width: 100%;
+}
+
+.header-right{
+  display: flex;
+  width: 100%;
+}
+
+.header-right #menu-buttons{
+  text-align: center;
+  width: 100%;
+  height: 100%;
+  justify-content: center;
+}
+
+.header-right #menu-buttons .nav_buttons{
+  display: flex;
+  justify-content: right;
+  align-items: center;
+  width: 100%;
+  height: 100%;
 }
