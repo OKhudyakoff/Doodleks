@@ -4,6 +4,7 @@ class Auth:
     __is_admin = False
     def set_attrs(__attrs):
         Auth.__attrs = __attrs
+        print(__attrs)
 
     def get_attrs():
         Auth.__attrs = __attrs
@@ -16,3 +17,6 @@ class Auth:
 
     def get_is_admin():
         return Auth.__is_admin
+    
+    def get_is_auth():
+        return Auth.__is_auth

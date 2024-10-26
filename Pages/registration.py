@@ -34,7 +34,7 @@ layout = html.Div(children=
 def login_button_click(clicks, login, password):
     if(clicks > 0):
         new_user = user.User()
-        if(new_user.is_there_user_by_login(login, password)):
+        if(new_user.register_user(login, password)):
             return '/'
     else:
         return no_update

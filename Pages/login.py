@@ -1,6 +1,6 @@
 from dash import Dash, dcc, html, Input, Output, callback, State, no_update, ctx, register_page
 import dash_bootstrap_components as dbc
-import user
+import models.user as user
 
 register_page(__name__, path="/login")
 LOGO_PATH = "assets/Screenshot2024-10-25183543.png"
@@ -33,8 +33,8 @@ layout = html.Div(children=
 
 def login_button_click(clicks, login, password):
     if(clicks > 0):
-        user.current_user.is_login = True
-        print("ok")
-        return '/'
+        new_user = user.User()
+        if(new_user.auth_user(login, password)[0]):
+            return '/'
     else:
         return no_update

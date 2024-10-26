@@ -2,6 +2,7 @@ from dash import dcc, page_container, html, Input, Output, callback, no_update
 import dash_bootstrap_components as dbc
 import user
 from server import app
+from auth import Auth
 
 dropdown = html.Div(
     [
@@ -23,7 +24,7 @@ dropdown = html.Div(
 )
 
 def nav_buttons():
-    if(user.current_user.is_login):
+    if(Auth.get_is_auth()):
         return html.Div(className="nav_buttons", children=
         [
             dbc.Button("Home", href="/", color="secondary", className="me-1"),
@@ -44,6 +45,6 @@ def nav_buttons():
 )
 def count_clicks(n):
     if n > 0:
-        user.current_user.is_login = False
+        Auth.reset_is_auth()
         return "/"
     return no_update
