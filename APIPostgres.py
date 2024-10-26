@@ -64,6 +64,9 @@ class APIPostgres:
 
         APIPostgres.__cur.execute(query)
 
+        # commit изменений
+        APIPostgres.__conn.commit()
+
         if 'select' in query.lower():
             return [row for row in APIPostgres.__cur]
             
