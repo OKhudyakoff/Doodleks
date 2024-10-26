@@ -45,3 +45,16 @@
   width: 100%;
   height: 100%;
 }
+.pagination-container{
+  display: flex;
+  flex-direction: column;
+  text-align: center;
+  align-items: center;
+  width: 100%;
+}
+
+.plagination{
+  display: flex;
+  text-align: center;
+  width: 100%;
+}
