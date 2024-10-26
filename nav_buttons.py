@@ -35,6 +35,7 @@ def nav_buttons():
             [
                 dbc.Button("Home", href="/", color="secondary", className="me-1"),
                 dbc.Button("Login", href="/login", color="secondary", className="me-1"),
+                dbc.Button("Registration", href="/registration", color="secondary", className="me-1"),
             ]
         )
 

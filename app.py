@@ -15,17 +15,32 @@ theme_toggle = ThemeSwitchAIO(
     icons={"left": "fa fa-sun", "right": "fa fa-moon"},
 )
 
-navbar = html.Div(className="nav_panel", children=
+navbar = html.Div(className="header", children=
     [
-        theme_toggle,
-        html.Div(id="menu-buttons"),
+        html.Div(className="logo", children=
+            [
+                html.H1(className="logo-text", children="viZOV",),
+                theme_toggle,
+            ]),
+        html.Div(className="header-right", children=
+        [
+            html.Div(id="menu-buttons")
+        ]
+        ),
     ],
 )
 
 app.layout = dbc.Container(
     [
-        dcc.Location(id='url', refresh=True),
-        navbar, page_container,
+        html.Div(className="root", children=
+        [
+            dcc.Location(id='url', refresh=True),
+            navbar,
+            html.Div(className="body", children=
+            [
+                page_container,
+            ]),
+        ])
     ],
     fluid=True,
 )
