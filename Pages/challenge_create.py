@@ -28,7 +28,7 @@ layout = html.Div(children=[
             
             dcc.Textarea(id="description", placeholder="Описание", style={'marginBottom': '10px', 'width': '300px'}),
             
-            dcc.Input(id="organizer", className='challenge_input', type="text", placeholder="Организатор", style={'marginBottom': '10px', 'width': '300px'}),
+            # dcc.Input(id="organizer", className='challenge_input', type="text", placeholder="Организатор", style={'marginBottom': '10px', 'width': '300px'}),
             
             html.H5("Выберите статус", style={'textAlign': 'left', 'color': '#333'}),
 
@@ -119,25 +119,30 @@ def manage_teams(add_clicks, team_names, team_members, team_list_children, team_
     State("start-date", "date"),
     State("end-date", "date"),
     State("description", "value"),
-    State("organizer", "value"),
+    # State("organizer", "value"),
     State("status", "value"),
     State("team-data", "data")
 )
-def create_challenge(n_clicks, name, start_date, end_date, description, organizer, status, team_data):
+def create_challenge(n_clicks, name, start_date, end_date, description, status, team_data):
     if n_clicks > 0:
-        if not name or not start_date or not end_date or not description or not organizer or not status:
+        if not name or not start_date or not end_date or not description or not status:
             return "Пожалуйста, заполните все поля."
 
+        id_owner = Auth
+        
         # Собираем все данные о вызове и командах
         challenge_data = {
-            "name": name,
-            "start_date": start_date,
-            "end_date": end_date,
-            "description": description,
-            "organizer": organizer,
-            "status": status,
-            "teams": [team for team in team_data if team["name"] and team["members"]]
+            "name": f"'{name}'",
+            "start_date": f"'{start_date}'",
+            "end_date": f"'{end_date}'",
+            "description": f"'{description}'",
+            "organizer": str(Auth.get_attrs()['id']),
+            "status": f"'{status}'"
         }
+
+        teams = [team for team in team_data if team["name"] and team["members"]]
+
+
 
         print(challenge_data)  # Проверка перед отправкой в базу данных
 
