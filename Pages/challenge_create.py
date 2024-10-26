@@ -157,8 +157,6 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
 
         id_challenge = str(challenge.get_attrs()['id'])
 
-        print(id_challenge)
-
         # сохраняем связь вызов - пользователь
         user_challenge = UserChallenge({
             'id_user' : id_owner,
