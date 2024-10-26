@@ -3,7 +3,7 @@ from dash import dcc, html, register_page, callback, Input, Output
 
 import dash_bootstrap_components as dbc
 
-register_page(__name__)
+register_page(__name__, path='/')
 
 
 # test_cards - тестовые карточки челенджей
