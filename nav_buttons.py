@@ -8,13 +8,10 @@ dropdown = html.Div(
         dbc.DropdownMenu(
             [
                 dbc.DropdownMenuItem(
-                    "Мои челленджи", href="/my_challenges"
-                ),
-                dbc.DropdownMenuItem(
-                    "Настройки", href="/settings"
-                ),
-                dbc.DropdownMenuItem(
                     "Личный кабинет", href="/lk"
+                ),
+                dbc.DropdownMenuItem(
+                    "Мои челленджи", href="/my_challenges"
                 ),
                 dbc.DropdownMenuItem(
                     "Выход", id="logout-button", n_clicks=0
