@@ -9,5 +9,5 @@ class Challenge(Model):
         'organizer' : 'Null',
         'status' : 'Null'
     }
-    def __init__(self, attrs):
-        super().__init__(table_name='challenge_', attrs=attrs)
+    def __init__(self, attrs_=attrs):
+        super().__init__(table_name='challenge_', attrs=attrs_)

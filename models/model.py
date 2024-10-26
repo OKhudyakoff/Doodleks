@@ -4,7 +4,7 @@ from datetime import datetime
 
 class Model:
     __is_save = False
-    __table_name = None
+    _table_name = None
 
     db = APIPostgres()
 
@@ -12,7 +12,7 @@ class Model:
     __attrs = dict()
 
     def __init__(self, table_name, attrs):
-        self.__table_name = table_name
+        self._table_name = table_name
         
     def save(self):
         '''
@@ -25,12 +25,12 @@ class Model:
             columns = ', '.join(str(key) for key in self.__attrs.keys())
             values = ', '.join(str(item) for item in self.__attrs.values())
 
-            query = f'''insert into {self.__table_name} ({columns}) values ({values})'''
+            query = f'''insert into {self._table_name} ({columns}) values ({values})'''
 
             self.db.executeQuery(query)
 
         except APIPostgresException as e:
-            print(f'save [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'save [1]: {self._table_name} error = ' + str(e.getMessage()))
 
 
     def update(self):
@@ -42,22 +42,22 @@ class Model:
                 f'{key}={value}' for key, value in self.__attrs.items() if key != 'id'
             ])
 
-            query = f'''update {self.__table_name} set {key_values} where id = {self.__attrs['id']}'''
+            query = f'''update {self._table_name} set {key_values} where id = {self.__attrs['id']}'''
 
             self.db.executeQuery(query)
         except APIPostgresException as e:
-            print(f'update [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'update [1]: {self._table_name} error = ' + str(e.getMessage()))
 
     def remove(self):
         '''
         удаление объекта
         '''
         try:
-            query = f'''delete from {self.__table_name} where id = {self.__attrs['id']}'''
+            query = f'''delete from {self._table_name} where id = {self.__attrs['id']}'''
             
             self.db.executeQuery(query)
         except APIPostgresException as e:
-            print(f'remove [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'remove [1]: {self._table_name} error = ' + str(e.getMessage()))
 
     def get_one(self):
         '''
@@ -68,12 +68,12 @@ class Model:
         try:
             list_select = ', '.join([str(key) for key in self.__attrs.keys()])
 
-            query = f'''select {list_select} from {self.__table_name} where id = {self.__attrs['id']}'''
+            query = f'''select {list_select} from {self._table_name} where id = {self.__attrs['id']}'''
 
             return self.db.executeQuery(query)
 
         except APIPostgresException as e:
-            print(f'save [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'save [1]: {self._table_name} error = ' + str(e.getMessage()))
     
         return None
 
@@ -87,11 +87,11 @@ class Model:
         try:
             list_select = ', '.join([str(key) for key in self.__attrs.keys()])
 
-            query = f'''select {list_select} from {self.__table_name}'''
+            query = f'''select {list_select} from {self._table_name}'''
 
             return self.db.executeQuery(query)
         except APIPostgresException as e:
-            print(f'save [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'save [1]: {self._table_name} error = ' + str(e.getMessage()))
 
         return None
 
@@ -111,10 +111,10 @@ class Model:
         '''
         try:
 
-            query = f'''select coalesce(max(id), 0) + 1 from {self.__table_name}'''
+            query = f'''select coalesce(max(id), 0) + 1 from {self._table_name}'''
 
             return self.db.executeQuery(query)[0][0]
         except APIPostgresException as e:
-            print(f'save [1]: {self.__table_name} error = ' + str(e.getMessage()))
+            print(f'save [1]: {self._table_name} error = ' + str(e.getMessage()))
 
         return None

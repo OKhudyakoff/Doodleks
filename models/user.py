@@ -12,8 +12,8 @@ class User(Model):
         'create_date' : 'Null'
     }
 
-    def __init__(self, attrs=attrs):
-        super().__init__(table_name='user_', attrs=attrs)
+    def __init__(self, attrs_=attrs):
+        super().__init__(table_name='user_', attrs=attrs_)
 
     def register_user(self, login='test', password='test'):
         '''
@@ -41,11 +41,14 @@ class User(Model):
 
     def auth_user(self, login='test', password='test'):
         '''
-        регистрируем пользователя
+        авторизуем пользователя
 
         return: 
-            возвращает False - когда регистрация провалена
-            возвращает True - когда регистрация завершилась успешно
+            возвращает
+            (True, 1) - валидация успешна
+            (False, 0) - такого логина нет
+            (False, -1) - неверный пароль
+            (False, -2) - другие случаи
         '''
         
         rez = self.validate_auth_user(login, password)
@@ -55,10 +58,9 @@ class User(Model):
             
             values = self.get_one()
 
-            ats = dict(zip(self.attrs.keys(), values))
+            ats = dict(zip(self.attrs.keys(), *values))
             
             self.set_attrs(ats)
-            
             Auth.set_is_auth()
             Auth.set_attrs(ats)
 
