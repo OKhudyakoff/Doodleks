@@ -53,6 +53,18 @@ class APIPostgres:
         id_challenge int REFERENCES vizov.challenge_ on delete cascade
     );'''
 
+    __sql_teams_create = '''create table if not exists teams_(
+        id int primary key,
+        team_id varchar(128),
+        name varchar(128),
+        members int
+    );'''
+
+    __sql_link_teams_user_create = '''create table teams_user_(
+        id_team int REFERENCES vizov.teams_ on delete cascade,
+        id_user int REFERENCES vizov.user_ on delete cascade
+    );'''
+
     def __init__(self):
         if APIPostgres.__conn == None or APIPostgres.__conn == None:
             self.__create_cur()
@@ -95,6 +107,8 @@ class APIPostgres:
         APIPostgres.__cur.execute(__sql_user_create)
         APIPostgres.__cur.execute(__sql_challenge_create)
         APIPostgres.__cur.execute(__sql_link_user_challenge_create)
+        APIPostgres.__cur.execute(__sql_teams_create)
+        APIPostgres.__cur.execute(__sql_link_teams_user_create)
 
 class APIPostgresException(Exception):
     pass
