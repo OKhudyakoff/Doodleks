@@ -8,4 +8,4 @@ class Team(Model):
         'id_challenge' : 'Null'
     }
     def __init__(self, attrs_=attrs):
-        super().__init__(table_name='teams_', attrs=attrs_)
+        super().__init__(table_name='teams_', attrs_=attrs_)

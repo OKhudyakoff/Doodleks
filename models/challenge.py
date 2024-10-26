@@ -10,4 +10,4 @@ class Challenge(Model):
         'status' : 'Null'
     }
     def __init__(self, attrs_=attrs):
-        super().__init__(table_name='challenge_', attrs=attrs_)
+        super().__init__(table_name='challenge_', attrs_=attrs_)

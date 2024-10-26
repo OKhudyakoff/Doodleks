@@ -2,12 +2,10 @@ from models.model import Model
 
 from api.APIPostgres import APIPostgresException
 
-import traceback
-
 class ModelLink(Model):
 
     def __init__(self, table_name, attrs_):
-        super().__init__(table_name=table_name, attrs=attrs_)
+        super().__init__(table_name=table_name, attrs_=attrs_)
 
     def save(self):
         '''
@@ -18,11 +16,7 @@ class ModelLink(Model):
             columns = ', '.join(str(key) for key in self.get_attrs().keys())
             values = ', '.join(str(item) for item in self.get_attrs().values())
 
-            print(self.get_attrs(), traceback.print_stack)
-
             query = f'''insert into {self._table_name} ({columns}) values ({values})'''
-
-            print(query)
 
             self.db.executeQuery(query)
 

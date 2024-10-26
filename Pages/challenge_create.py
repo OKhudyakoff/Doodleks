@@ -137,7 +137,7 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
 
         id_owner = None
         if type(Auth.get_attrs()) is dict:
-            str(Auth.get_attrs()['id']) 
+            id_owner = str(Auth.get_attrs()['id']) 
         else:
             return '/'
 

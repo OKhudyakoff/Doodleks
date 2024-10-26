@@ -11,7 +11,8 @@ class Model:
     # атрибуты модели
     __attrs = dict()
 
-    def __init__(self, table_name, attrs):
+    def __init__(self, table_name, attrs_):
+        self.set_attrs(attrs_)
         self._table_name = table_name
         
     def save(self):

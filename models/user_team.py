@@ -6,4 +6,4 @@ class UserTeam(ModelLink):
         'id_user' : 'Null'
     }
     def __init__(self, attrs_=attrs):
-        super().__init__(table_name='teams_user_', attrs=attrs_)
+        super().__init__(table_name='teams_user_', attrs_=attrs_)

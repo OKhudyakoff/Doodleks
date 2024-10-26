@@ -13,7 +13,7 @@ class User(Model):
     }
 
     def __init__(self, attrs_=attrs):
-        super().__init__(table_name='user_', attrs=attrs_)
+        super().__init__(table_name='user_', attrs_=attrs_)
 
     def register_user(self, login='test', password='test'):
         '''
