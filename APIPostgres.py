@@ -30,8 +30,6 @@ class APIPostgres:
     __conn = None
     __cur = None
 
-    
-
     def __init__(self):
         if APIPostgres.__conn == None or APIPostgres.__conn == None:
             self.__create_cur()
@@ -73,10 +71,3 @@ class APIPostgres:
             return [row for row in APIPostgres.__cur]
             
         return None
-
-    def init_tables():
-        pass
-
-
-class APIPostgresException(Exception):
-    pass

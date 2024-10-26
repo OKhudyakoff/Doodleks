@@ -12,13 +12,13 @@ layout = html.Div(children=
             html.Div(className="panel", children=
             [
                 #html.Img(src=LOGO_PATH),  # логотип
-                html.H2("Регистрация"),
+                html.H2("Регистрация", className='heading'),
                 html.Div(
-                    dcc.Input(id="username", className='login_input', type="text", placeholder="Логин", style={'marginBottom': '10px'}),
+                    dcc.Input(id="username", className='some_input', type="text", placeholder="Логин", style={'marginBottom': '10px'}),
                     style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}
                 ),
                 html.Div(
-                    dcc.Input(id="password", className='login_input', type="password", placeholder="Пароль", style={'marginBottom': '10px'}),
+                    dcc.Input(id="password", className='some_input', type="password", placeholder="Пароль", style={'marginBottom': '10px'}),
                     style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center'}
                 ),
                 html.Button("Зарегистрироваться", id="reg_button", n_clicks=0, style={'marginTop': '10px', 'padding': '10px 20px', 'backgroundColor': '#ffc107', 'border': 'none', 'color': '#fff', 'cursor': 'pointer'})
