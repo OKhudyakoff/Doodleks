@@ -5,7 +5,7 @@ register_page(__name__, path="/create_challenge")
 
 layout = html.Div(children=[
     dcc.Location(id='challenge-url', refresh=True),
-    dcc.Store(id="team-data", data=[]),  # Хранилище для данных команд
+    dcc.Store(id="team-data", data=[]),
     html.Div(className="wrapper", children=[
         html.Div(className="panel", children=[
             html.H2("Создание вызова", style={'textAlign': 'center', 'color': '#333'}),
@@ -81,25 +81,35 @@ def toggle_team_inputs(team_value, team_container_children):
         team_container_children = []
     return team_container_children
 
+# Комбинированный callback для добавления и обновления команд
 @callback(
     Output("team-list", "children"),
     Output("team-data", "data"),
     Input("add-team-button", "n_clicks"),
+    Input({"type": "team-name", "index": ALL}, "value"),
+    Input({"type": "team-members", "index": ALL}, "value"),
     State("team-list", "children"),
     State("team-data", "data")
 )
-def add_team(n_clicks, team_list_children, team_data):
-    if n_clicks > 0:
-        # Новый набор полей для команды
-        team_id = f"team-{n_clicks}"
+def manage_teams(add_clicks, team_names, team_members, team_list_children, team_data):
+    # Обрабатываем добавление команды
+    if add_clicks and len(team_list_children) < add_clicks:
+        team_id = f"team-{add_clicks}"
         new_team = html.Div([
-            dcc.Input(id=f"{team_id}-name", type="text", placeholder="Название команды", style={'marginBottom': '5px', 'width': '200px'}),
-            dcc.Input(id=f"{team_id}-members", type="number", min=1, placeholder="Количество участников", style={'marginBottom': '10px', 'width': '200px'}),
+            dcc.Input(id={"type": "team-name", "index": team_id}, type="text", placeholder="Название команды", style={'marginBottom': '5px', 'width': '200px'}),
+            dcc.Input(id={"type": "team-members", "index": team_id}, type="number", min=1, placeholder="Количество участников", style={'marginBottom': '10px', 'width': '200px'}),
         ], style={'marginBottom': '10px'})
-
-        team_data.append({"team_id": team_id, "name": "", "members": 0})  # Добавляем пустой шаблон для команды
         
+        team_data.append({"team_id": team_id, "name": "", "members": 0})
         team_list_children.append(new_team)
+
+    # Обновляем данные о командах
+    for i, team in enumerate(team_data):
+        if i < len(team_names):
+            team["name"] = team_names[i] if team_names[i] else ""
+        if i < len(team_members):
+            team["members"] = team_members[i] if team_members[i] else 0
+
     return team_list_children, team_data
 
 @callback(
@@ -111,15 +121,14 @@ def add_team(n_clicks, team_list_children, team_data):
     State("description", "value"),
     State("organizer", "value"),
     State("status", "value"),
-    State("team-data", "data"),
-    State({"type": "dynamic-team-input", "index": ALL}, "value")
+    State("team-data", "data")
 )
-def create_challenge(n_clicks, name, start_date, end_date, description, organizer, status, team_data, team_input_values):
+def create_challenge(n_clicks, name, start_date, end_date, description, organizer, status, team_data):
     if n_clicks > 0:
         if not name or not start_date or not end_date or not description or not organizer or not status:
             return "Пожалуйста, заполните все поля."
 
-        # Запись данных вызова
+        # Собираем все данные о вызове и командах
         challenge_data = {
             "name": name,
             "start_date": start_date,
@@ -127,17 +136,12 @@ def create_challenge(n_clicks, name, start_date, end_date, description, organize
             "description": description,
             "organizer": organizer,
             "status": status,
-            "teams": []
+            "teams": [team for team in team_data if team["name"] and team["members"]]
         }
 
-        # Обрабатываем данные команд и добавляем к challenge_data
-        for team in team_data:
-            if team["name"] and team["members"]:
-                challenge_data["teams"].append(team)  # Добавляем каждую команду как отдельный элемент списка
-
-        # Логика для сохранения данных в базе данных
-        print(challenge_data)  # Проверка перед отправкой в базу
+        print(challenge_data)  # Проверка перед отправкой в базу данных
 
         return "Вызов успешно создан!"
     return ""
+
 
