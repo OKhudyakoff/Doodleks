@@ -1,4 +1,5 @@
 from models.model import Model
+from auth import Auth
 
 class User(Model):
 
@@ -48,12 +49,15 @@ class User(Model):
         if rez[0] == 1:
             self.attrs['id'] = rez[1]
             self.set_attrs(self.attrs)
-
-            print(self.get_attrs())
             
             values = self.get_one()
 
-            self.set_attrs(dict(zip(self.attrs.keys(), values)))
+            ats = dict(zip(self.attrs.keys(), values))
+            
+            self.set_attrs(ats)
+            
+            Auth.set_is_auth()
+            Auth.set_attrs(ats)
 
             return (True, rez[0])
 
