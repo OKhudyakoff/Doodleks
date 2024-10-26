@@ -6,6 +6,8 @@ import themes
 import nav_buttons
 import user
 
+from APIPostgres import APIPostgres, APIPostgresException
+
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 user_pages = {"Мои челленджи":"/my_challenge", "Настройки":"/settings"}
 
@@ -15,11 +17,11 @@ theme_toggle = ThemeSwitchAIO(
     icons={"left": "fa fa-sun", "right": "fa fa-moon"},
 )
 
-navbar = html.Header(className="header", children=
+navbar = html.Div(className="header", children=
     [
         html.Div(className="logo", children=
             [
-                html.H1(className="logo-text", children="weZOV",),
+                html.H1(className="logo-text", children="viZOV",),
                 theme_toggle,
             ]),
         html.Div(className="header-right", children=
@@ -38,8 +40,8 @@ app.layout = dbc.Container(
             navbar,
             html.Div(className="body", children=
             [
-                page_container
-            ] ),
+                page_container,
+            ]),
         ])
     ],
     fluid=True,
@@ -53,5 +55,9 @@ def update_authentication_status(_):
     return nav_buttons.nav_buttons()
 
 if __name__ == '__main__':
-    app.run_server(debug=True)
+    
+    # если не прошла инициализация базы - падаем
+    if APIPostgres.init_tables():
+        raise APIPostgresException('Error initialize database')
 
+    app.run_server(debug=True)
