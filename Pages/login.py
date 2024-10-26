@@ -2,12 +2,12 @@ from dash import Dash, dcc, html, Input, Output, callback, State, no_update, ctx
 import dash_bootstrap_components as dbc
 
 register_page(__name__, path="/login")
-LOGO_PATH = "Screenshot2024-10-25183543.png"
+LOGO_PATH = "assets/Screenshot2024-10-25183543.png"
 layout = html.Div(
     style={'display': 'flex', 'flexDirection': 'column', 'justifyContent': 'center', 'alignItems': 'center', 'height': '100vh', 'backgroundColor': '#f8f9fa'},  # центрирование и фон
     children=[
         dcc.Location(id='url', refresh=True),
-        #html.Img(src=app.get_asset_url(LOGO_PATH)),  # логотип
+        html.Img(src=LOGO_PATH),  # логотип
         html.H1("Добро пожаловать на портал компании Оджетто", style={'textAlign': 'center', 'color': '#333'}),  # заголовок
         html.Div(
             dcc.Input(id="username", type="text", placeholder="Логин", style={'marginBottom': '10px'}),
