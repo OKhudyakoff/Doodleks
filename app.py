@@ -15,11 +15,11 @@ theme_toggle = ThemeSwitchAIO(
     icons={"left": "fa fa-sun", "right": "fa fa-moon"},
 )
 
-navbar = html.Div(className="header", children=
+navbar = html.Header(className="header", children=
     [
         html.Div(className="logo", children=
             [
-                html.H1(className="logo-text", children="viZOV",),
+                html.H1(className="logo-text", children="weZOV",),
                 theme_toggle,
             ]),
         html.Div(className="header-right", children=
@@ -38,8 +38,8 @@ app.layout = dbc.Container(
             navbar,
             html.Div(className="body", children=
             [
-                page_container,
-            ]),
+                page_container
+            ] ),
         ])
     ],
     fluid=True,
@@ -54,3 +54,4 @@ def update_authentication_status(_):
 
 if __name__ == '__main__':
     app.run_server(debug=True)
+
