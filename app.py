@@ -1,4 +1,4 @@
-from dash import dcc, page_container, html, Output, Input, no_update
+from dash import dcc, page_container, html, Output, Input
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import ThemeSwitchAIO
 from server import app

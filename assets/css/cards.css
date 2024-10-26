@@ -1,0 +1,19 @@
+.card-group{
+    max-width:70%;
+    margin-left : auto;
+    margin-right : auto;
+}
+
+.card{
+    max-width: 100%;
+}
+
+.list-group-item{
+    position: relative;
+    display: block;
+    padding: 0px;
+    color: var(--bs-list-group-color);
+    text-decoration: none;
+    background-color: var(--bs-list-group-bg);
+    border: 0px;
+}
