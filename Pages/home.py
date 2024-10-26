@@ -1,6 +1,6 @@
 import dash
 from dash import dcc, html, register_page, callback, Input, Output
-
+import math
 import dash_bootstrap_components as dbc
 
 register_page(__name__, path='/')
@@ -10,7 +10,7 @@ register_page(__name__, path='/')
 # test_cards - тестовые карточки челенджей
 test_cards = []
 current_page = 0
-for i in range(10):
+for i in range(11):
     card = dbc.Card(
         [
             dbc.Row(
@@ -75,10 +75,8 @@ layout = html.Div(
         ),
         html.Div(className="pagination-container", children=
         [
-            dbc.Pagination(id="pagination", max_value=10, active_page = 1, fully_expanded=False),
+            dbc.Pagination(id="pagination", max_value=math.ceil(len(test_cards)/5), active_page = 1, fully_expanded=False),
         ])
-    
-        
         # html.Div(id='cards'),
     ]
 )
@@ -87,7 +85,11 @@ layout = html.Div(
           Input("pagination", "active_page"))
 
 def update_page(page_number):
-     return test_cards[page_number-1:page_number+4]
+     start_value = (page_number-1)*5
+     end_value = page_number*5
+     if(end_value > len(test_cards)):
+          end_value = len(test_cards)
+     return test_cards[start_value:end_value]
 
 # @callback(
 #     Output('chalenge-cards', 'children'),
