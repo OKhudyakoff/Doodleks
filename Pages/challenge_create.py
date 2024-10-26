@@ -60,7 +60,7 @@ layout = html.Div(children=[
             html.Div(id="team-container", children=[], style={'width': '300px', 'marginBottom': '10px'}),
 
             html.Button("Создать вызов", id="submit-challenge", n_clicks=0, style={'marginTop': '10px', 'padding': '10px 20px', 'backgroundColor': '#ffc107', 'border': 'none', 'color': '#fff', 'cursor': 'pointer'}),
-            
+
             html.Div(id="creation-status", style={'marginTop': '20px', 'color': 'green'})
         ]),
     ])
@@ -90,10 +90,14 @@ def toggle_team_inputs(team_value, team_container_children):
 )
 def add_team(n_clicks, team_list_children, team_data):
     if n_clicks > 0:
+        # Новый набор полей для команды
+        team_id = f"team-{n_clicks}"
         new_team = html.Div([
-            dcc.Input(type="text", placeholder="Название команды", style={'marginBottom': '5px', 'width': '200px'}),
-            dcc.Input(type="number", min=1, placeholder="Количество участников", style={'marginBottom': '10px', 'width': '200px'}),
+            dcc.Input(id=f"{team_id}-name", type="text", placeholder="Название команды", style={'marginBottom': '5px', 'width': '200px'}),
+            dcc.Input(id=f"{team_id}-members", type="number", min=1, placeholder="Количество участников", style={'marginBottom': '10px', 'width': '200px'}),
         ], style={'marginBottom': '10px'})
+
+        team_data.append({"team_id": team_id, "name": "", "members": 0})  # Добавляем пустой шаблон для команды
         
         team_list_children.append(new_team)
     return team_list_children, team_data
@@ -114,11 +118,26 @@ def create_challenge(n_clicks, name, start_date, end_date, description, organize
     if n_clicks > 0:
         if not name or not start_date or not end_date or not description or not organizer or not status:
             return "Пожалуйста, заполните все поля."
-        
-        # Конкатенируем данные команд в строку
-        teams_str = "#".join([f"{team['name']} {team['members']}" for team in team_data if team["name"] and team["members"]])
 
-        # Логика для сохранения челленджа в базе данных
+        # Запись данных вызова
+        challenge_data = {
+            "name": name,
+            "start_date": start_date,
+            "end_date": end_date,
+            "description": description,
+            "organizer": organizer,
+            "status": status,
+            "teams": []
+        }
+
+        # Обрабатываем данные команд и добавляем к challenge_data
+        for team in team_data:
+            if team["name"] and team["members"]:
+                challenge_data["teams"].append(team)  # Добавляем каждую команду как отдельный элемент списка
+
+        # Логика для сохранения данных в базе данных
+        print(challenge_data)  # Проверка перед отправкой в базу
 
         return "Вызов успешно создан!"
     return ""
+
