@@ -1,10 +1,13 @@
-from dash import dcc, page_container, html, Input, Output
+from dash import dcc, page_container, html, Output, Input, no_update
 import dash_bootstrap_components as dbc
 from dash_bootstrap_templates import ThemeSwitchAIO
 from server import app
 import themes
+import nav_buttons
+import user
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
+user_pages = {"Мои челленджи":"/my_challenge", "Настройки":"/settings"}
 
 theme_toggle = ThemeSwitchAIO(
     aio_id="theme",
@@ -12,15 +15,11 @@ theme_toggle = ThemeSwitchAIO(
     icons={"left": "fa fa-sun", "right": "fa fa-moon"},
 )
 
-navbar = dbc.NavbarSimple(
+navbar = html.Div(className="nav_panel", children=
     [
         theme_toggle,
-        html.Div(id='menu-buttons'),
+        html.Div(id="menu-buttons"),
     ],
-    brand="viZOV",
-    color="primary",
-    dark=True,
-    className="mb-3",
 )
 
 app.layout = dbc.Container(
@@ -36,19 +35,7 @@ app.layout = dbc.Container(
     Input('url', 'pathname'),
 )
 def update_authentication_status(_):
-    if True:
-        return html.Div(
-            [
-                dbc.Button("Home", href="/home", color="secondary", className="me-1"),
-                dbc.Button(id='logout-button', children='Logout', n_clicks=0, color="secondary", className="me-1"),
-            ]
-        )
-    return html.Div(
-        [
-            dbc.Button("Home", href="/", color="secondary", className="me-1"),
-            dbc.Button(id = 'login-button', children = "Login", href="/login", color="secondary", className="me-1"),
-        ]
-    )
+    return nav_buttons.nav_buttons()
 
 if __name__ == '__main__':
-    app.run_server(debug='True')
+    app.run_server(debug=True)
