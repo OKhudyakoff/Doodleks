@@ -12,7 +12,6 @@ class Model:
     __attrs = dict()
 
     def __init__(self, table_name, attrs):
-        self.set_attrs(attrs)
         self.__table_name = table_name
         
     def save(self):
@@ -20,13 +19,15 @@ class Model:
         сохранение объекта
         '''
         try:
-            id = self.__get_id()
+            id = self._get_id()
             self.__attrs['id'] = str(id)
 
-            columns = ', '.join(key for key in self.__attrs.keys())
-            values = ', '.join(item for item in self.__attrs.values())
+            columns = ', '.join(str(key) for key in self.__attrs.keys())
+            values = ', '.join(str(item) for item in self.__attrs.values())
 
             query = f'''insert into {self.__table_name} ({columns}) values ({values})'''
+
+            print(query)
 
             self.db.executeQuery(query)
 
@@ -69,7 +70,7 @@ class Model:
         возвращает кортеж
         '''
         try:
-            list_select = ', '.join([key for key in self.__attrs.keys()])
+            list_select = ', '.join([str(key) for key in self.__attrs.keys()])
 
             query = f'''select {list_select} from {self.__table_name} where id = {self.__attrs['id']}'''
 
@@ -88,7 +89,7 @@ class Model:
             возвращает список кортежей
         '''
         try:
-            list_select = ', '.join([key for key in self.__attrs.keys()])
+            list_select = ', '.join([str(key) for key in self.__attrs.keys()])
 
             query = f'''select {list_select} from {self.__table_name}'''
 
@@ -105,7 +106,7 @@ class Model:
     def get_attrs(self):
         return self.__attrs
 
-    def __get_id(self):
+    def _get_id(self):
         '''
         генерим след айди
 
