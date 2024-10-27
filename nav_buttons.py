@@ -6,13 +6,10 @@ from auth import Auth
 
 dropdown = html.Div(
     [
-        dbc.DropdownMenu(
+        dbc.DropdownMenu(id='dropdown', children=
             [
                 dbc.DropdownMenuItem(
                     "Личный кабинет", href="/lk"
-                ),
-                dbc.DropdownMenuItem(
-                    "Мои челленджи", href="/my_challenges"
                 ),
                 dbc.DropdownMenuItem(
                     "Выход", id="logout-button", n_clicks=0
@@ -41,10 +38,12 @@ def nav_buttons():
         )
 
 @app.callback(
-    Output("url", "pathname"), [Input("logout-button", "n_clicks")]
+    Output("url", "pathname"), 
+    Output("dropdown", "label"),
+    [Input("logout-button", "n_clicks")]
 )
 def count_clicks(n):
-    if n > 0:
+    if n > 0 and Auth.get_is_auth():
         Auth.reset_is_auth()
-        return "/"
-    return no_update
+        return "/", "User"
+    return no_update, Auth.get_attrs()['login']
