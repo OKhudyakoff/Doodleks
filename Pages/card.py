@@ -36,7 +36,7 @@ def getChallenge(id_challenge):
         *ch
     ))
 
-def layout(id_challenge, **kwargs):
+def get_data(id_challenge):
     challenge = getChallenge(id_challenge)
 
     heading = html.H1(    
@@ -121,8 +121,7 @@ def layout(id_challenge, **kwargs):
         outline=True, 
         color="success", 
         className="me-1", 
-        n_clicks = 0,
-        style = None if Auth.get_is_auth() and not Auth.user.is_there_challenger(challenge['id']) else {"display" : "none"}
+        n_clicks = 0
     
     )
     join_button = html.Div(
@@ -156,8 +155,7 @@ def layout(id_challenge, **kwargs):
         id="out_challenge", 
         outline=True,
         color="danger",
-        className="me-1",
-        style= None if Auth.get_is_auth() and Auth.user.is_there_challenger(challenge['id']) else {"display" : "none"}
+        className="me-1"
     )
     leave_button = html.Div(
         leave_button,
@@ -167,36 +165,45 @@ def layout(id_challenge, **kwargs):
             "margin-right" : "auto"
         }
     )
-    
+
     return html.Div([
         dcc.Location(id='card-url', refresh=True),
         heading,
         group_for_first_info,
-        join_button ,
+        join_button if Auth.get_is_auth() and not Auth.user.is_there_challenger(challenge['id']) else None,
         description_challenge,
-        leave_button,
+        leave_button if Auth.get_is_auth() and Auth.user.is_there_challenger(challenge['id']) else None,
     ])
 
+def layout(id_challenge, **kwargs):
+    df = get_data(id_challenge)
+    return df
+
 @callback(
-    Output("join_challenge", "style"),
-    Output("out_challenge", "style"),
+    Output("card-url", "pathname", allow_duplicate=True),
+    # Output("join_challenge", "style"),
+    # Output("out_challenge", "style"),
     Input("join_challenge", "n_clicks"),
-    State("challenge_card", "children")
+    State("challenge_card", "children"),
+    prevent_initial_call='initial_duplicate'
 )
 def join_to_challenge(n_clicks, id_challenge):
     if n_clicks == 1:
         Auth.user.join_to_challenge(id_challenge)
-
-        return {"display" : "none"}, 
+        return '/'
+    return no_update
+        # return {"display" : "none"}, 
 
 @callback(
-    Output("out_challenge", "style"),
-    Output("join_challenge", "style"),
+    Output("card-url", "pathname"),
+    # Output("out_challenge", "style"),
+    # Output("join_challenge", "style"),
     Input("out_challenge", "n_clicks"),
     State("challenge_card", "children")
 )
 def join_to_challenge(n_clicks, id_challenge):
     if n_clicks == 1:
         Auth.user.out_from_challenge(id_challenge)
-
-        return {"display" : "none"}, 
+        return '/'
+    return no_update
+        # return {"display" : "none"}, 

@@ -12,11 +12,11 @@ layout = html.Div(
         dcc.Location(id='settings-url', refresh=True),
         
         
-        html.H3(f'ФИО: {new_user.name}', id='fio-display', className='ten columns'),
+        html.H3(f'ФИО: {new_user.get_attrs()['name']}', id='fio-display', className='ten columns'),
         
         
         html.Div(id='user_content', className='user_content', children=[
-            html.H3(f'Логин: {new_user.login}')
+            html.H3(f'Логин: {new_user.get_attrs()['login']}')
         ]),
 
         
