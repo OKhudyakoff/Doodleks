@@ -33,7 +33,8 @@ class Challenge(Model):
                     select id_challenge 
                     from user_challenge_ 
                     where id_user = {Auth.get_attrs()['id']}
-                )   
+                )  
+                 
             '''
 
             return self.db.executeQuery(query)
