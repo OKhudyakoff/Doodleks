@@ -1,14 +1,13 @@
 from dash import dcc, html, Input, Output, State, callback, register_page
 import dash_bootstrap_components as dbc
-import user
+import models.user as user
 
 register_page(__name__, path="/settings")
 
 # Заглушка для пользователя (в будущем данные будут получены из базы данных)
-new_user = user.User("KoksFox", "Oleg", 1024)
+new_user = user.User()
 
 layout = html.Div(
-    style={'display': 'flex', 'flexDirection': 'column', 'justifyContent': 'flex-start', 'alignItems': 'center', 'height': '100vh'},
     children=[
         dcc.Location(id='settings-url', refresh=True),
         
