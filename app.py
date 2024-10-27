@@ -4,6 +4,7 @@ from dash_bootstrap_templates import ThemeSwitchAIO
 from server import app
 import themes
 import nav_buttons
+import user
 
 external_stylesheets = ['https://codepen.io/chriddyp/pen/bWLwgP.css']
 user_pages = {"Мои челленджи":"/my_challenge", "Настройки":"/settings"}
