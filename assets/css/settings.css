@@ -1,0 +1,17 @@
+.settings-container{
+    display: flex;
+    height: 80vh;
+    flex-direction: row;
+    justify-content: space-evenly;
+}
+
+.settings-panel{
+    background-color: #fff;
+    width: 40%;
+    min-height: 50%;
+    border-radius: 5px;
+    padding: 2%;
+    flex-wrap: column;
+    margin-top: 5%;
+    box-shadow: 1px 1px 100px 0px rgb(211, 211, 211)
+}

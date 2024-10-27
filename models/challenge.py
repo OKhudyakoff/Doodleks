@@ -1,5 +1,5 @@
 from models.model import Model
-
+from api.APIPostgres import APIPostgresException
 from auth import Auth
 
 class Challenge(Model):
@@ -24,7 +24,7 @@ class Challenge(Model):
             возвращает список кортежей
         '''
         try:
-            list_select = ', '.join([str(key) for key in self.__attrs.keys()])
+            list_select = ', '.join([str(key) for key in self.get_attrs().keys()])
 
             query = f'''
                 select {list_select} 
