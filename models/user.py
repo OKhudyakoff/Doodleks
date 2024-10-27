@@ -1,5 +1,9 @@
 from models.model import Model
+
+from models.user_challenge import UserChallenge
+
 from auth import Auth
+
 
 class User(Model):
 
@@ -36,6 +40,7 @@ class User(Model):
 
         Auth.set_is_auth()
         Auth.set_attrs(self.get_attrs())
+        Auth.set_user(self)
 
         return rez
 
@@ -63,6 +68,7 @@ class User(Model):
             self.set_attrs(ats)
             Auth.set_is_auth()
             Auth.set_attrs(ats)
+            Auth.set_user(self)
 
             return (True, rez[0])
 
@@ -105,3 +111,27 @@ class User(Model):
         
         return (-2, None)
 
+    def is_there_challenger(self, id_challenge):
+        """
+        метод проверяет есть ли такой вызов у пользователя
+
+        return:
+            True - такой вызов у пользователя есть
+            False - такого вызовы у пользователя нет
+        """
+        query = f"""select 1 from user_challenge_ where id_user = {self.get_attrs()['id']} and id_challenge = {id_challenge}"""
+
+        rez = self.db.executeQuery(query)
+
+        if rez:
+            return True
+        return False
+
+    def join_to_challenge(self, id_challenge):
+        """
+        метод добавляет новый вызов для пользователя
+        """
+        UserChallenge({
+            "id_user" : self.get_attrs()['id'],
+            "id_challenge" : id_challenge
+        }).save()

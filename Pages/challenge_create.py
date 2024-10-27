@@ -139,7 +139,7 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
         if type(Auth.get_attrs()) is dict:
             id_owner = str(Auth.get_attrs()['id']) 
         else:
-            return '/'
+            return None
 
         # Собираем все данные о вызове и командах
         challenge_data = {

@@ -2,6 +2,8 @@ class Auth:
     __attrs = None
     __is_auth = False
     __is_admin = False
+    user = None
+
     def set_attrs(__attrs):
         Auth.__attrs = __attrs
 
@@ -21,3 +23,6 @@ class Auth:
     
     def get_is_auth():
         return Auth.__is_auth
+
+    def set_user(user_):
+        Auth.user = user_
