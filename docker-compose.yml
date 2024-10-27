@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+      - ./postgres-config/pg_hba.conf:/etc/postgresql/postgresql.conf.d/pg_hba.conf
+      - ./postgres-config/postgresql.conf:/etc/postgresql/postgresql.conf.d/postgresql.conf
+    command: >
+      postgres -c 'config_file=/etc/postgresql/postgresql.conf.d/postgresql.conf'
+
+  app:
+    build: .
+    container_name: dash_app
+    ports:
+      - "8050:8050"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=postgres
+      - POSTGRES_HOST=db
+    depends_on:
+      - db
+
+
+
+volumes:
+  postgres_data:

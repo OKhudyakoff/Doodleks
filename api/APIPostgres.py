@@ -21,11 +21,11 @@ class APIPostgres:
     print(rez)
     '''
 
-    __host = 'desktop-5h7tutm'
+    __host = 'db'
     __port = 5432
     __database = 'postgres'
-    __user = 'vizov'
-    __password = 'vizov'
+    __user = 'postgres'
+    __password = 'postgres'
 
     __conn = None
     __cur = None
@@ -42,15 +42,19 @@ class APIPostgres:
 
     __sql_challenge_create = '''create table if not exists challenge_(
         id int primary key,
-        title varchar(256),
-        description varchar(1024),
-        prize int,
-        amount_members int
+        name varchar(256),
+        start_date date,
+        end_date date,
+        description varchar(2048),
+        organizer int references public.user_ on delete cascade,
+        status varchar(128),
+        amount_members int,
+        prize int
     );'''
 
     __sql_link_user_challenge_create = '''create table if not exists user_challenge_(
-        id_user int REFERENCES vizov.user_ on delete cascade,
-        id_challenge int REFERENCES vizov.challenge_ on delete cascade
+        id_user int REFERENCES public.user_ on delete cascade,
+        id_challenge int REFERENCES public.challenge_ on delete cascade
     );'''
 
     __sql_teams_create = '''create table if not exists teams_(
@@ -58,12 +62,12 @@ class APIPostgres:
         team_id varchar(128),
         name varchar(128),
         members int,
-        id_challenge int REFERENCES vizov.challenge_ on delete cascade
+        id_challenge int REFERENCES public.challenge_ on delete cascade
     );'''
 
-    __sql_link_teams_user_create = '''create table teams_user_(
-        id_team int REFERENCES vizov.teams_ on delete cascade,
-        id_user int REFERENCES vizov.user_ on delete cascade
+    __sql_link_teams_user_create = '''create table if not exists teams_user_(
+        id_team int REFERENCES public.teams_ on delete cascade,
+        id_user int REFERENCES public.user_ on delete cascade
     );'''
 
     def __init__(self):
@@ -104,12 +108,12 @@ class APIPostgres:
             
         return None
 
-    def init_tables():
-        APIPostgres.__cur.execute(__sql_user_create)
-        APIPostgres.__cur.execute(__sql_challenge_create)
-        APIPostgres.__cur.execute(__sql_link_user_challenge_create)
-        APIPostgres.__cur.execute(__sql_teams_create)
-        APIPostgres.__cur.execute(__sql_link_teams_user_create)
+    def init_tables(self):
+        self.executeQuery(self.__sql_user_create)
+        self.executeQuery(self.__sql_challenge_create)
+        self.executeQuery(self.__sql_link_user_challenge_create)
+        self.executeQuery(self.__sql_teams_create)
+        self.executeQuery(self.__sql_link_teams_user_create)
 
 class APIPostgresException(Exception):
     pass
