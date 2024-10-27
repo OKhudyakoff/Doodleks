@@ -135,7 +135,11 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
         if not name or not start_date or not end_date or not description or not status:
             return "Пожалуйста, заполните все поля."
 
-        id_owner = str(Auth.get_attrs()['id'])
+        id_owner = None
+        if type(Auth.get_attrs()) is dict:
+            id_owner = str(Auth.get_attrs()['id']) 
+        else:
+            return None
 
         # Собираем все данные о вызове и командах
         challenge_data = {
@@ -144,7 +148,8 @@ def create_challenge(n_clicks, name, start_date, end_date, description, status, 
             "end_date": f"'{end_date}'",
             "description": f"'{description}'",
             "organizer": id_owner,
-            "status": f"'{status}'"
+            "status": f"'{status}'",
+            'amount_members' : str(0)
         }
 
         # сохраняем вызов
