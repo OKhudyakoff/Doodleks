@@ -1,60 +1,86 @@
 from dash import dcc, html, register_page, get_asset_url, callback, Input, Output
 import dash_bootstrap_components as dbc
 from auth import Auth
+from models.challenge import Challenge
 
 register_page(__name__, path="/lk")
 
 # Пример изображения и создания пользователя
 LOGO_PATH = get_asset_url("static/images/portrait-placeholder.png")
 
-test_cards = []
-current_page = 0
-for i in range(11):
-    card = dbc.Card(
-        [
-            dbc.Row(
-                [
-                    dbc.Col(
-                        dbc.CardImg(
-                            src=get_asset_url("static/images/portrait-placeholder.png"),
-                            className="img-fluid rounded-start",
-                        ),
-                        className="col-md-4",
-                    ),
-                    dbc.Col(
-                        dbc.CardBody(
-                            [
-                                html.H4(f"Card title: {i+1}", className="card-title"),
-                                html.P(
-                                    "This is a wider card with supporting text "
-                                    "below as a natural lead-in to additional "
-                                    "content. This content is a bit longer.",
-                                    className="card-text",
-                                ),
-                                html.Small(
-                                    "Last updated 3 mins ago",
-                                    className="card-text text-muted",
-                                ),
-                            ]
-                        ),
-                        className="col-md-8",
-                    ),
-                ],
-                className="g-0 d-flex align-items-center",
-            )
-        ],
-    )
+def get_cards():
+    cards = []
+    
+    challenge = Challenge({
+        'id' : 'Null',
+        'name' : 'Null',
+        'start_date' : 'Null',
+        'end_date' : 'Null',
+        'description' : 'Null',
+        'organizer' : 'Null',
+        'status' : 'Null',
+        'amount_members' : 'Null'
+    })
 
-    test_cards.append(
-        dbc.ListGroupItem(
-            children=card,
-            className="mb-3",
-            href=f'/card/{i}',
-            action=True
+    rows = challenge.get_auth_all()
+
+    for row in rows:
+
+        id = row[0]
+        name = row[1]
+        start_date = row[2]
+        end_date = row[3]
+        description = row[4]
+        organizer = row[5]
+        status = row[6]
+
+        card = dbc.Card(
+            [
+                dbc.Row(
+                    [
+                        dbc.Col(
+                            dbc.CardImg(
+                                src=get_asset_url("static/images/portrait-placeholder.png"),
+                                className="img-fluid rounded-start",
+                            ),
+                            className="col-md-4",
+                        ),
+                        dbc.Col(
+                            dbc.CardBody(
+                                [
+                                    html.H4(f"{id}. {name}", className="card-title"),
+                                    html.P(description,
+                                        className="card-text",
+                                    ),
+                                    html.Small(
+                                        "Last updated 3 mins ago",
+                                        className="card-text text-muted",
+                                    ),
+                                ]
+                            ),
+                            className="col-md-8",
+                        ),
+                    ],
+                    className="g-0 d-flex align-items-center",
+                )
+            ],
         )
-    )
+
+        cards.append(
+            dbc.ListGroupItem(
+                children=card,
+                className="mb-3",
+                href=f'/card/{id}',
+                action=True
+            )
+        )
+
+    return cards
+
+
 def layout(**kwargs):
     if(Auth.get_is_auth()):
+        cards = get_cards()
         return html.Div(children=
         [
             dcc.Location(id='lk-url', refresh=True),
@@ -82,7 +108,7 @@ def layout(**kwargs):
                     [
                         html.Div(
                         dbc.ListGroup(
-                            children=test_cards,
+                            children=cards,
                             id="my-chalenge-cards",
                         ),
                         style={
