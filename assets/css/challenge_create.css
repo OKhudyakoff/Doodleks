@@ -7,12 +7,6 @@
     box-shadow: 1px 1px 100px 0px rgb(211, 211, 211)
 }
 
-.date_picker{
-    width: 30%;
-}
-
-
-
 .pools {
     display: flex;
     max-width: 90%;
@@ -28,21 +22,17 @@
 
 .column_text{
     width: 40%;
+    color: #808080;
 }
 
-.dates{
-    align-content: center;
-    display: flex;
-}
-
-.chal_input{
+.challenge_input{
     width: 85%;
     border: #808080 1px;
     font-size: 1.5em;
     align-items: flex-start;
     display: flex;
     margin-left: 5%;
-    margin-top: 2%;
+    margin-top: 5%;
     margin-bottom: 1%;
     border-radius: 2px;
     padding: 5px;
