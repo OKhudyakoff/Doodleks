@@ -8,7 +8,7 @@ register_page(__name__, path="/lk")
 # Пример изображения и создания пользователя
 LOGO_PATH = get_asset_url("static/images/portrait-placeholder.png")
 
-def get_cards_lk():
+def get_cards():
     cards = []
     
     challenge = Challenge({
@@ -80,7 +80,7 @@ def get_cards_lk():
 
 def layout(**kwargs):
     if(Auth.get_is_auth()):
-        cards = get_cards_lk()
+        cards = get_cards()
         return html.Div(children=
         [
             dcc.Location(id='lk-url', refresh=True),
@@ -124,8 +124,3 @@ def layout(**kwargs):
         ])
     else:
         return html.Div()
-    
-@callback(Output('my-chalenge-cards', 'children'), Input('lk-url', 'pathname'))
-def update_cards_lk(pathname):
-    cards = get_cards_lk()
-    return cards

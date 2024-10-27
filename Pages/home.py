@@ -105,14 +105,11 @@ layout = html.Div(
 )
 
 @callback(Output('chalenge-cards', 'children'),
-          Output('pagination', 'max_value'),
-          Input("pagination", "active_page"),
-          Input('home-url', 'pathname'))
+          Input("pagination", "active_page"))
 
-def update_page(page_number,pathname):
-     cards = get_cards()
+def update_page(page_number):
      start_value = (page_number-1)*5
      end_value = page_number*5
      if(end_value > len(cards)):
           end_value = len(cards)+1
-     return cards[start_value:end_value], math.ceil(len(cards)/5)
+     return cards[start_value:end_value]
