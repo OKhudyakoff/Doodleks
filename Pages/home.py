@@ -76,40 +76,43 @@ def get_cards():
 
     return cards
 
-cards = get_cards()
+def layout(**kwargs):
+    cards = get_cards()
 
-layout = html.Div(
-    [
-        dcc.Location(id='home-url', refresh=False),
-        html.H2('Челенджи', id='header-title', className='ten columns'),
-
-        # dbc.Button('Submit', id='submit-val', n_clicks=0),
-
-        html.Div(
-            dbc.ListGroup(
-                children=cards,
-                id="chalenge-cards",
-            ),
-            style={
-                "maxWidth":"70%",
-                "margin-left" : "auto",
-                "margin-right" : "auto"
-            }
-        ),
-        html.Div(className="pagination-container", children=
+    return html.Div(
         [
-            dbc.Pagination(id="pagination", max_value=math.ceil(len(cards)/5), active_page = 1, fully_expanded=False),
-        ])
-        # html.Div(id='cards'),
-    ]
+            dcc.Location(id='home-url', refresh=False),
+            html.H2('Челенджи', id='header-title', className='ten columns'),
+
+            # dbc.Button('Submit', id='submit-val', n_clicks=0),
+
+            html.Div(
+                dbc.ListGroup(
+                    children=cards,
+                    id="chalenge-cards",
+                ),
+                style={
+                    "maxWidth":"70%",
+                    "margin-left" : "auto",
+                    "margin-right" : "auto"
+                }
+            ),
+            html.Div(className="pagination-container", children=
+            [
+                dbc.Pagination(id="pagination", max_value=math.ceil(len(cards)/5), active_page = 1, fully_expanded=False),
+            ])
+            # html.Div(id='cards'),
+        ]
+    )
+
+@callback(
+    Output('chalenge-cards', 'children'),
+    Input("pagination", "active_page")
 )
-
-@callback(Output('chalenge-cards', 'children'),
-          Input("pagination", "active_page"))
-
 def update_page(page_number):
-     start_value = (page_number-1)*5
-     end_value = page_number*5
-     if(end_value > len(cards)):
-          end_value = len(cards)
-     return cards[start_value:end_value]
+    cards = get_cards()
+    start_value = (page_number-1)*5
+    end_value = page_number*5
+    if(end_value > len(cards)):
+        end_value = len(cards)
+    return cards[start_value:end_value]
