@@ -1,6 +1,7 @@
 from dash import dcc, html, Input, Output, callback, register_page, State, ALL
 import dash_bootstrap_components as dbc
-
+from dash import dcc
+from datetime import date
 from auth import Auth
 
 from models.challenge import Challenge
@@ -14,54 +15,62 @@ layout = html.Div(children=[
     dcc.Location(id='challenge-url', refresh=True),
     dcc.Store(id="team-data", data=[]),
     html.Div(className="wrapper", children=[
-        html.Div(className="panel", children=[
-            html.H2("Создание вызова", style={'textAlign': 'center', 'color': '#333'}),
-
-            dcc.Input(id="challenge-name", className='challenge_input', type="text", placeholder="Название вызова", style={'marginBottom': '10px', 'width': '300px'}),
+        html.Div(className="create_panel", children=[
+            html.H2("Создание вызова", className="title"),
+            dcc.Input(id="challenge-name", className='challenge_input', type="text", placeholder="Название вызова"),
             
-            dcc.DatePickerSingle(
-                id="start-date",
-                placeholder="Дата начала",
-                display_format='YYYY-MM-DD',
-                style={'marginBottom': '10px'}
+            html.Div(className="pools", children = [
+                dcc.DatePickerRange(
+                    id = "dates",
+                    className="dates",
+                    clearable=True,
+                    with_portal=True,
+                )]
             ),
             
-            dcc.DatePickerSingle(
-                id="end-date",
-                placeholder="Дата окончания",
-                display_format='YYYY-MM-DD',
-                style={'marginBottom': '10px'}
-            ),
-            
-            dcc.Textarea(id="description", placeholder="Описание", style={'marginBottom': '10px', 'width': '300px'}),
-            
-            # dcc.Input(id="organizer", className='challenge_input', type="text", placeholder="Организатор", style={'marginBottom': '10px', 'width': '300px'}),
-            
-            html.H5("Выберите статус", style={'textAlign': 'left', 'color': '#333'}),
-
-            dcc.Dropdown(
-                id="status",
-                options=[
-                    {"label": "💪", "value": "strength"},
-                    {"label": "🐾", "value": "pets"},
-                    {"label": "🎉", "value": "celebration"},
-                    {"label": "😂", "value": "laughter"},
-                    {"label": "🎨", "value": "art"},
-                    {"label": "📷", "value": "camera"},
-                    {"label": "🧑‍💻", "value": "computer_work"},
-                ],
-                style={'marginBottom': '10px', 'width': '100px'}
+            dbc.InputGroup(
+            [
+                dbc.InputGroupText(className= "column_text", children="Описание"),
+                dbc.Textarea(id="description"),
+            ],
+            className="pools",
             ),
 
-            html.H5("Командное противостояние", style={'textAlign': 'left', 'color': '#333'}),              
+            html.Div(className="pools", children=
+                [dbc.InputGroup(
+                [
+                    dbc.InputGroupText(className="column_text", children="Выберите статус"),
+                    dbc.Select(
+                        id ="status",
+                        options=[
+                            {"label": "💪", "value": "strength"},
+                            {"label": "🐾", "value": "pets"},
+                            {"label": "🎉", "value": "celebration"},
+                            {"label": "😂", "value": "laughter"},
+                            {"label": "🎨", "value": "art"},
+                            {"label": "📷", "value": "camera"},
+                            {"label": "🧑‍💻", "value": "computer_work"},
+                        ]
+                    ),
+                    
+                ]
+                ),]
+            ),
 
-            dcc.Dropdown(
-                id="team",
-                options=[
-                    {"label": "Да", "value": "Yes"},
-                    {"label": "Нет", "value": "No"},
-                ],
-                style={'marginBottom': '10px', 'width': '100px'}
+            html.Div(className="pools", children=
+                [dbc.InputGroup(
+                [
+                    dbc.InputGroupText(className="column_text", children="Командное противостояние"),
+                    dbc.Select(
+                        id ="team",
+                        options=[
+                            {"label": "Да", "value": "Yes"},
+                            {"label": "Нет", "value": "No"},
+                        ]
+                    ),
+                    
+                ]
+                ),]
             ),
 
             html.Div(id="team-container", children=[], style={'width': '300px', 'marginBottom': '10px'}),
@@ -123,8 +132,8 @@ def manage_teams(add_clicks, team_names, team_members, team_list_children, team_
     Output("creation-status", "children"),
     Input("submit-challenge", "n_clicks"),
     State("challenge-name", "value"),
-    State("start-date", "date"),
-    State("end-date", "date"),
+    State("dates", "start_date"),
+    State("dates", "end_date"),
     State("description", "value"),
     # State("organizer", "value"),
     State("status", "value"),
