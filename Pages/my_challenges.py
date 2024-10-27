@@ -2,6 +2,7 @@ import dash
 from dash import dcc, html, register_page, callback, Input, Output
 import math
 import dash_bootstrap_components as dbc
+from auth import Auth
 
 register_page(__name__, '/my_challenges')
 
@@ -54,31 +55,34 @@ for i in range(11):
         )
     )
 
-layout = html.Div(
-    [
-        dcc.Location(id='my-challenges-url', refresh=False),
-        html.H2('Мои челенджи', id='header-title', className='ten columns'),
+def layout(**kwargs):
+    if(Auth.get_is_auth()):
+        return html.Div(
+            [
+                dcc.Location(id='my-challenges-url', refresh=False),
+                html.H2('Мои челенджи', id='header-title', className='ten columns'),
 
-        # dbc.Button('Submit', id='submit-val', n_clicks=0),
+                # dbc.Button('Submit', id='submit-val', n_clicks=0),
 
-        html.Div(
-            dbc.ListGroup(
-                children=test_cards,
-                id="my-chalenge-cards",
-            ),
-            style={
-                "maxWidth":"70%",
-                "margin-left" : "auto",
-                "margin-right" : "auto"
-            }
-        ),
-        html.Div(className="pagination-container", children=
-        [
-            dbc.Pagination(id="my-pagination", max_value=math.ceil(len(test_cards)/5), active_page = 1, fully_expanded=False),
-        ])
-        # html.Div(id='cards'),
-    ]
-)
+                html.Div(
+                    dbc.ListGroup(
+                        children=test_cards,
+                        id="my-chalenge-cards",
+                    ),
+                    style={
+                        "maxWidth":"70%",
+                        "margin-left" : "auto",
+                        "margin-right" : "auto"
+                    }
+                ),
+                html.Div(className="pagination-container", children=
+                [
+                    dbc.Pagination(id="my-pagination", max_value=math.ceil(len(test_cards)/5), active_page = 1, fully_expanded=False),
+                ])
+                # html.Div(id='cards'),
+            ])
+    else:
+        return html.Div()
 
 @callback(Output('my-chalenge-cards', 'children'),
           Input("my-pagination", "active_page"))
