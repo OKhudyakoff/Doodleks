@@ -1,5 +1,5 @@
 import dash
-from dash import dcc, html, register_page, callback, Input, Output, State
+from dash import dcc, html, register_page, callback, Input, Output, State, no_update
 
 import dash_bootstrap_components as dbc
 
@@ -14,7 +14,7 @@ def getChallenge(id_challenge):
     """
         Возвращаем коллекцию данных вызова
     """
-    
+
     attrs = {
         'id' : str(id_challenge),
         'name' : 'Null',
@@ -37,7 +37,6 @@ def getChallenge(id_challenge):
     ))
 
 def layout(id_challenge, **kwargs):
-    
     challenge = getChallenge(id_challenge)
 
     heading = html.H1(    
@@ -47,7 +46,7 @@ def layout(id_challenge, **kwargs):
                 children = id_challenge,
                 id = 'challenge_card',
                 style = {
-                    "visible" : "none"
+                    "display" : "none"
                 }
             )
         ],
@@ -116,7 +115,16 @@ def layout(id_challenge, **kwargs):
         }
     )
 
-    join_button = dbc.Button("Присоединиться к испытанию", id="join_challenge", outline=True, color="success", className="me-1")
+    join_button = dbc.Button(
+        "Присоединиться к испытанию", 
+        id="join_challenge", 
+        outline=True, 
+        color="success", 
+        className="me-1", 
+        n_clicks = 0,
+        style = None if Auth.get_is_auth() and not Auth.user.is_there_challenger(challenge['id']) else {"display" : "none"}
+    
+    )
     join_button = html.Div(
         join_button,
         style={
@@ -143,7 +151,14 @@ def layout(id_challenge, **kwargs):
         }
     )
 
-    leave_button = dbc.Button("уйти с испытания", outline=True, color="danger", className="me-1")
+    leave_button = dbc.Button(
+        "уйти с испытания", 
+        id="out_challenge", 
+        outline=True,
+        color="danger",
+        className="me-1",
+        style= None if Auth.get_is_auth() and Auth.user.is_there_challenger(challenge['id']) else {"display" : "none"}
+    )
     leave_button = html.Div(
         leave_button,
         style={
@@ -152,21 +167,36 @@ def layout(id_challenge, **kwargs):
             "margin-right" : "auto"
         }
     )
-
     
-
     return html.Div([
+        dcc.Location(id='card-url', refresh=True),
         heading,
         group_for_first_info,
-        join_button if Auth.get_is_auth() and not Auth.user.is_there_challenger(challenge['id']) else None,
+        join_button ,
         description_challenge,
-        leave_button if Auth.get_is_auth() and Auth.user.is_there_challenger(challenge['id']) else None,
+        leave_button,
     ])
 
 @callback(
+    Output("join_challenge", "style"),
+    Output("out_challenge", "style"),
     Input("join_challenge", "n_clicks"),
-    State("challenge_card", "value")
+    State("challenge_card", "children")
 )
 def join_to_challenge(n_clicks, id_challenge):
     if n_clicks == 1:
         Auth.user.join_to_challenge(id_challenge)
+
+        return {"display" : "none"}, 
+
+@callback(
+    Output("out_challenge", "style"),
+    Output("join_challenge", "style"),
+    Input("out_challenge", "n_clicks"),
+    State("challenge_card", "children")
+)
+def join_to_challenge(n_clicks, id_challenge):
+    if n_clicks == 1:
+        Auth.user.out_from_challenge(id_challenge)
+
+        return {"display" : "none"}, 

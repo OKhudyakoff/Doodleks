@@ -1,5 +1,7 @@
 from models.model import Model
 
+from auth import Auth
+
 class Challenge(Model):
     attrs = {
         'name' : 'Null',
@@ -13,3 +15,25 @@ class Challenge(Model):
     }
     def __init__(self, attrs_=attrs):
         super().__init__(table_name='challenge_', attrs_=attrs_)
+
+    def get_auth_all(self):
+        '''
+        получение всех вызовов авторизованного пользователя
+
+        return: 
+            возвращает список кортежей
+        '''
+        try:
+            list_select = ', '.join([str(key) for key in self.__attrs.keys()])
+
+            query = f'''
+                select {list_select} 
+                from {self._table_name} 
+                where organizer = {Auth.get_attrs()['id']} or {Auth.get_attrs()['id']} in (select id_user from user_challenge_)   
+            '''
+
+            return self.db.executeQuery(query)
+        except APIPostgresException as e:
+            print(f'save [1]: {self._table_name} error = ' + str(e.getMessage()))
+
+        return None
