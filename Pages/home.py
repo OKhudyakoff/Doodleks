@@ -111,5 +111,5 @@ def update_page(page_number):
      start_value = (page_number-1)*5
      end_value = page_number*5
      if(end_value > len(cards)):
-          end_value = len(cards)
+          end_value = len(cards)+1
      return cards[start_value:end_value]
