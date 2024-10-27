@@ -22,3 +22,16 @@ class ModelLink(Model):
 
         except APIPostgresException as e:
             print(f'save [1]: error = ' + str(e.getMessage()))
+
+    def remove(self):
+        """
+        удаление объекта
+        """
+
+        try:
+            query = f'''delete from {self._table_name} where id_user = {self.get_attrs()['id_user']} and id_challenge = {self.get_attrs()['id_challenge']}'''
+
+            self.db.executeQuery(query)
+
+        except APIPostgresException as e:
+            print(f'save [1]: error = ' + str(e.getMessage()))

@@ -135,3 +135,13 @@ class User(Model):
             "id_user" : self.get_attrs()['id'],
             "id_challenge" : id_challenge
         }).save()
+
+    def out_from_challenge(self, id_challenge):
+        """
+        метод удаляет вызов у пользователя
+        """
+
+        UserChallenge({
+            "id_user" : self.get_attrs()['id'],
+            "id_challenge" : id_challenge
+        }).remove()
