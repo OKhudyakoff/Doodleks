@@ -3,6 +3,8 @@ import themes
 
 dbc_css = "https://cdn.jsdelivr.net/gh/AnnMarieW/dash-bootstrap-templates/dbc.min.css"
 
+from api.APIPostgres import APIPostgres
+APIPostgres().init_tables()
 
 app = dash.Dash(
     __name__,
