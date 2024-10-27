@@ -4,11 +4,31 @@ import models.user as user
 
 register_page(__name__, path="/login")
 LOGO_PATH = "assets/Screenshot2024-10-25183543.png"
+
+modal = html.Div(
+    [
+        dbc.Modal(
+            [
+                dbc.ModalHeader(dbc.ModalTitle("Ошибка")),
+                dbc.ModalBody(id = "result", children = "This is the content of the modal"),
+                dbc.ModalFooter(
+                    dbc.Button(
+                        "Закрыть", id="close", className="ms-auto", n_clicks=0
+                    )
+                ),
+            ],
+            id="modal",
+            is_open=False,
+        ),
+    ]
+)
+
 layout = html.Div(children=
     [
         dcc.Location(id='login-url', refresh=True),
         html.Div(className="wrapper", children=
         [
+            modal,
             html.Div(className="panel", children=
             [
                 #html.Img(src=LOGO_PATH),  # логотип
@@ -26,13 +46,28 @@ layout = html.Div(children=
 )
 
 @callback(Output('login-url', 'pathname'),
-          Input('login_button', 'n_clicks'), 
-          [State('username', "value"), State("password", "value")])
+          Output("modal", "is_open"),
+          Output("result", "children"),
+          [Input('login_button', 'n_clicks'),
+          Input("close", "n_clicks")], 
+          [State('username', "value"), State("password", "value"), State("modal","is_open")])
 
-def login_button_click(clicks, login, password):
-    if(clicks > 0):
+def login_button_click(clicks_login, clicks_modal_close, login, password, is_open):
+    result_text= ""
+    if(clicks_login > 0 and is_open == False):
         new_user = user.User()
-        if(new_user.auth_user(login, password)[0]):
-            return '/'
+        result = new_user.auth_user(login, password)
+        if(result[0]):
+            return '/', False, result_text
+        else:
+            if(result[1] == 0):
+                result_text = "Пользователя с таким логином не существует."
+            elif(result[1] == -1):
+                result_text = "Неверный пароль."
+            else:
+                result_text = "Неизвестная ошибка"
+            return no_update, True, result_text,
+    elif(clicks_modal_close > 0 and is_open == True):
+        return no_update, False, result_text
     else:
-        return no_update
+        return no_update, False, result_text
