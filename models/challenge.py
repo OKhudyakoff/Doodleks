@@ -29,7 +29,11 @@ class Challenge(Model):
             query = f'''
                 select {list_select} 
                 from {self._table_name} 
-                where organizer = {Auth.get_attrs()['id']} or {Auth.get_attrs()['id']} in (select id_user from user_challenge_)   
+                where organizer = {Auth.get_attrs()['id']} or id in (
+                    select id_challenge 
+                    from user_challenge_ 
+                    where id_user = {Auth.get_attrs()['id']}
+                )   
             '''
 
             return self.db.executeQuery(query)
