@@ -19,7 +19,10 @@
     background-color: transparent;
     border: none;
     border-bottom: 1px solid 	#808080;
-    vertical-align: middle
+    vertical-align: middle;
+    padding-left: 5%;
+    margin-left: 5%;
+    margin-bottom: 5%;
 }
 
 .heading{
